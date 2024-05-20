@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "@material-ui/core": "^4.12.4",
+    "express": "^4.19.2",
+    "mongodb": "^6.6.1",
+    "mongoose": "^8.3.4",
+    "nodejs": "^0.0.0"
+  },
+  "devDependencies": {
+    "nodeom": "^0.0.1"
+  },
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
