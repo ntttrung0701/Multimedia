@@ -7,9 +7,9 @@ const ffmpeg = require('fluent-ffmpeg');
 
 // Cấu hình OAuth2 cho Google API, giả định rằng bạn đã thiết lập các thông tin xác thực
 const oauth2Client = new google.auth.OAuth2(
-  /* Your Client ID */,
-  /* Your Client Secret */,
-  /* Your Redirect URL */
+  //* Your Client ID */,
+  //* Your Client Secret */,
+  //* Your Redirect URL */
 );
 
 const VideoController = {

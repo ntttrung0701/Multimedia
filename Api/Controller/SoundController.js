@@ -1,5 +1,6 @@
 const db = require('../Models/Sound'); // Thay đổi đường dẫn phù hợp với cấu trúc của bạn
 const {google} = require('googleapis');
+const { model } = require('mongoose');
 const drive = google.drive('v3');
 const stream = require('stream');
 const player = require('play-sound')(opts = {});
@@ -35,7 +36,7 @@ const soundController = {
 
   // Phát bài hát
   playSong: (req, res) => {
-    const songPath = /* Đường dẫn đến file nhạc */
+    //const songPath = /* Đường dẫn đến file nhạc */
     const audio = player.play(songPath, (err) => {
       if (err) res.status(500).send(err);
     });
