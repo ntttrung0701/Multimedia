@@ -1,10 +1,10 @@
-const mongoose = require("../config/mongoose");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const soundSchema = new Schema({
     idSound:{
         type: ObjectId,
-        req: 'Image',
+        req: 'sound',
         required: true
     },
   title: {
@@ -26,11 +26,7 @@ const soundSchema = new Schema({
   size:{
     type: String,
     required: true
-  },
-  uploadedAt: {
-    type: Date,
-    default: Date.now
   }
 });
 
-const Sound = mongoose.model('Sound', soundSchema);
+const Sound = mongoose.model('sound', soundSchema);

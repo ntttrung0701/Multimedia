@@ -1,36 +1,33 @@
-const mongoose = require("../config/mongoose");
+const { duration } = require("@material-ui/core");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const videoSchema = new Schema({
     idVideo:{
         type: ObjectId,
-        req: 'Video',
+        req: 'video',
         required: true
     },
-  title: {
+  title: { //tên của video trên google drive
     type: String,
     required: true
   },
-  description:{
+  duration:{//thời lượng video trên google drive
     type: String,
     required: true
   },
-  format:{
+  format:{//định dạng của video đó 
     type: String,
     required: true
   },
-  path:{
+  path:{// đường dẫn đến google drive của video đó 
     type: String,
     required: true
   },
-  size:{
+  size:{ // kích thước của video
     type: String,
     required: true
-  },
-  uploadedAt: {
-    type: Date,
-    default: Date.now
   }
 });
 
-const Video = mongoose.model('Video', videoSchema);
+const Video = mongoose.model('video', videoSchema);
