@@ -1,77 +1,84 @@
-// File: controllers/VideoController.js
-
-const db = require('../models'); // Điều chỉnh đường dẫn dựa trên cấu trúc thư mục của bạn
-const { google } = require('googleapis');
-const drive = google.drive('v3');
-const ffmpeg = require('fluent-ffmpeg');
-
-// Cấu hình OAuth2 cho Google API, giả định rằng bạn đã thiết lập các thông tin xác thực
-const oauth2Client = new google.auth.OAuth2(
-  //* Your Client ID */,
-  //* Your Client Secret */,
-  //* Your Redirect URL */
-);
+const Video = require('../models/Video');
+const googleDriveUtils = require('../Utils/googleDrive');
 
 const VideoController = {
-  getAllVideosFromDB: async (req, res) => {
+
+  getAllVideos: async (req, res) => {
     try {
-      const videos = await db.Video.findAll();
+      const videos = await Video.find({});
       res.json(videos);
     } catch (error) {
-      res.status(500).send(error.message);
+      console.error(error);
+      res.status(500).send('Server error');
     }
   },
 
-  getAllVideosFromDrive: async (req, res) => {
+  getVideoById: async (req, res) => {
     try {
-      const response = await drive.files.list({
-        auth: oauth2Client,
-        q: "mimeType='video/*'"
-      });
-      res.json(response.data.files);
+      const video = await Video.findById(req.params.id); // sử dụng req.params.id để lấy id từ URL
+      if (!video) {
+        return res.status(404).send('Video not found');
+      }
+      res.json(video);
     } catch (error) {
-      res.status(500).send(error.message);
+      console.error(error);
+      res.status(500).send('Server error');
     }
   },
 
-  playVideo: (req, res) => {
-    // Phát video thông qua giao diện người dùng trên trang web của bạn sẽ được 
-    // xử lý chủ yếu bởi front-end, ví dụ sử dụng HTML5 <video> tag
+  uploadVideo: async (req, res) => {
+    try {
+      const { file } = req; // Giả định rằng file đã được đính kèm thông qua multer
+      const videoMetadata = await videoService.uploadVideoToDrive(file); // uploadVideoToDrive phải trả về metadata cần thiết để lưu trên db
+      
+      const newVideo = new Video({
+        ...videoMetadata,
+      });
+      
+      const savedVideo = await newVideo.save();
+      res.json(savedVideo);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+    }
   },
 
-  stopVideo: (req, res) => {
-    // Giống như phát video, chức năng dừng cũng do front-end xử lý
+  viewVideo: (req, res) => {
+    // Phương pháp này phụ thuộc vào cách bạn phục vụ video,
+    // với Google Drive, bạn có thể phục vụ một liên kết trực tiếp đến file hoặc sử dụng API để phát stream video
   },
 
-  resumeVideo: (req, res) => {
-    // Giống như phát và dừng video
+  cutVideo: async (req, res) => {
+    try {
+      const { videoId, startTime, endTime } = req.body;
+
+      const video = await Video.findById(videoId);
+      if (!video) {
+        return res.status(404).send('Original video not found');
+      }
+
+      // Cắt video bằng cách sử dụng googleDriveUtils hoặc một service riêng
+      const cutVideoMetadata = await videoService.cutVideo(video.path, startTime, endTime);
+
+      // Tải video đã cắt lên Google Drive
+      const cutVideoFile = cutVideoMetadata.file;
+      const uploadedCutVideoMetadata = await googleDriveUtils.uploadFile(cutVideoFile);
+
+      const newVideo = new Video({
+        ...uploadedCutVideoMetadata,
+      });
+
+      const savedCutVideo = await newVideo.save();
+      res.json(savedCutVideo);
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+    }
   },
 
-  nextVideo: (req, res) => {
-    // Chuyển đến video tiếp theo trong playlist, cũng được xử lý bởi front-end
-  },
+  // Thêm các phương pháp other methods here, như deleteVideo, updateVideo, etc...
 
-  adjustVolume: (req, res) => {
-    // Điều chỉnh âm lượng cũng là một tính năng được quản lý bởi phía client
-  },
-
-  trimVideo: (req, res) => {
-    // Chức năng cắt video sẽ sử dụng thư viện như fluent-ffmpeg
-    // Điều chỉnh startTime và duration theo yêu cầu của bạn
-    const { videoPath, startTime, duration } = req.body;
-
-    ffmpeg(videoPath)
-      .setStartTime(startTime) // Ví dụ: '00:01:00' (cắt từ phút thứ nhất)
-      .setDuration(duration) // Ví dụ: '00:02:00' (cắt với tổng thời lượng 2 phút)
-      .output('output.mp4') // Lưu video vào file mới
-      .on('end', function() {
-        res.send('Trimming completed!');
-      })
-      .on('error', function(err) {
-        res.status(500).send(err.message);
-      })
-      .run();
-  }
 };
 
 module.exports = VideoController;

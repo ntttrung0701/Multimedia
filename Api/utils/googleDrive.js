@@ -24,7 +24,7 @@ fs.readFile('credentials.json', (err, content) => {
  * @param {Object} credentials Dữ liệu xác thực client.
  */
 function authorize(credentials) {
-  const {client_secret, client_id, redirect_uris} = credentials.installed;
+  const {client_secret, client_id, redirect_uris} = credentials.web;
   const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 
   // Kiểm tra xem token đã lưu chưa.
