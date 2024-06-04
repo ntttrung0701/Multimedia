@@ -22,16 +22,13 @@ router.get('/videos', VideoController.getAllVideos);
 
 // Route lấy video theo ID
 router.get('/videos/:id', VideoController.getVideoById);
-
 // Route upload video. Sử dụng Multer với key 'video'
 router.post('/videos', upload.single('video'), VideoController.uploadVideo);
 
 // Route cắt video
 router.post('/videos/cut', VideoController.cutVideo);
-
 // Route xem video
 router.get('/videos/view/:filename', VideoController.viewVideo);
-
 // Route download video
 router.get('/videos/download/:id', VideoController.downloadVideo);
 
