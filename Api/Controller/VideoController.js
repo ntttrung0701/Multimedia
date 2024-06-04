@@ -1,7 +1,10 @@
 const Video = require('../models/Video');
+const fs = require('fs');
+const path = require('path');
 
 const VideoController = {
 
+  // Lấy tất cả video từ database
   getAllVideos: async (req, res) => {
     try {
       const videos = await Video.find({});
@@ -12,9 +15,10 @@ const VideoController = {
     }
   },
 
+  // Lấy video theo ID
   getVideoById: async (req, res) => {
     try {
-      const video = await Video.findById(req.params.id); // sử dụng req.params.id để lấy id từ URL
+      const video = await Video.findById(req.params.id);
       if (!video) {
         return res.status(404).send('Video not found');
       }
@@ -25,62 +29,74 @@ const VideoController = {
     }
   },
 
+  // Tải video lên web và lưu vào database
   uploadVideo: async (req, res) => {
     try {
-      const { file } = req; // Giả định rằng file đã được đính kèm thông qua multer
-      const videoMetadata = await videoService.uploadVideoToDrive(file); // uploadVideoToDrive phải trả về metadata cần thiết để lưu trên db
+      // Đường dẫn của file video trong thư mục tạm sau khi được tải lên
+      const videoPath = req.file.path; // Đường dẫn tới file video
+      const videoSize = fs.statSync(videoPath).size; // Kích thước file
       
+      // Tạo mới một video document với thông tin tương ứng
       const newVideo = new Video({
-        ...videoMetadata,
+        title: req.body.title,
+        duration: req.body.duration,
+        format: path.extname(videoPath),
+        path: videoPath,
+        size: videoSize
       });
-      
+
+      // Lưu vào database
       const savedVideo = await newVideo.save();
-      res.json(savedVideo);
+      res.status(200).json(savedVideo);
     } catch (error) {
       console.error(error);
       res.status(500).send('Server error');
     }
   },
 
-  viewVideo: (req, res) => {
-    // Phương pháp này phụ thuộc vào cách bạn phục vụ video,
-    // với Google Drive, bạn có thể phục vụ một liên kết trực tiếp đến file hoặc sử dụng API để phát stream video
-  },
-
+  // Cắt video theo yêu cầu
   cutVideo: async (req, res) => {
     try {
+      // Khi nhận thông tin cắt từ request
       const { videoId, startTime, endTime } = req.body;
-
-      const video = await Video.findById(videoId);
-      if (!video) {
+      const originalVideo = await Video.findById(videoId);
+      if (!originalVideo) {
         return res.status(404).send('Original video not found');
       }
 
-      // Cắt video bằng cách sử dụng googleDriveUtils hoặc một service riêng
-      const cutVideoMetadata = await videoService.cutVideo(video.path, startTime, endTime);
+      // Tiến hành cắt video thông qua dịch vụ video
+      const cutVideoPath = await videoService.cutVideo(originalVideo.path, startTime, endTime);
 
-      // Tải video đã cắt lên Google Drive
-      const cutVideoFile = cutVideoMetadata.file;
-      const uploadedCutVideoMetadata = await googleDriveUtils.uploadFile(cutVideoFile);
-
-      const newVideo = new Video({
-        ...uploadedCutVideoMetadata,
-      });
-
-      const savedCutVideo = await newVideo.save();
-      // saveCutVideo.data.id
-      // api/video/create => id
-
-      res.json(savedCutVideo);
-
+      // Response với đường dẫn của video đã cắt
+      res.status(200).json({ path: cutVideoPath });
     } catch (error) {
       console.error(error);
       res.status(500).send('Server error');
     }
   },
 
-  // Thêm các phương pháp other methods here, như deleteVideo, updateVideo, etc...
+  // Phát video trực tiếp từ server
+  viewVideo: (req, res) => {
+    const videoPath = path.join(__dirname, '..', 'uploads', req.params.filename);
 
+    // Kiểm tra xem file có tồn tại không
+    if (fs.existsSync(videoPath)) {
+      res.sendFile(videoPath);
+    } else {
+      res.status(404).send('Video not found');
+    }
+  },
+
+  // Chức năng truyền tải video từ server về máy khách
+  downloadVideo: (req, res) => {
+    const video = await.Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).send('Video not found');
+    }
+
+    res.download(video.path); // Trả về video với khả năng tải xuống
+  },
+
+  // Bạn có thể thêm các phương thức khác như deleteVideo, updateVideo nếu cần
 };
-
 module.exports = VideoController;
