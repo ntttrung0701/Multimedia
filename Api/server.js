@@ -1,13 +1,17 @@
+require('dotenv').config(); // Nếu bạn sử dụng dotenv
 const express = require('express');
-const app = express();
+const connectDB = require('./Config/connect');
 const imageRoutes = require('./Routes/ImageRoutes');
-const videoRoutes = require('./Routes/VideoRoutes');
+const videoRoutes = require('./Routes/VideoRoutes')
 
+const app = express();
+
+// Kết nối MongoDB
+connectDB();
 app.use(express.json());
 app.use('/api', imageRoutes);
 app.use('/api', videoRoutes);
+// Các cài đặt khác như middleware, routes, ...
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log('Server is running on port ${port}'); // Chú ý sử dụng backticks ở đây
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('Server đang chạy trên port ${PORT}'));

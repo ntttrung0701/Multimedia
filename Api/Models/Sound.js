@@ -26,6 +26,11 @@ const soundSchema = new Schema({
   size:{
     type: String,
     required: true
+  },
+  idVideo:{
+    type: String,
+    required: true,
+    req:'video'
   }
 });
 

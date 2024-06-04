@@ -1,5 +1,4 @@
 const Video = require('../models/Video');
-const googleDriveUtils = require('../Utils/googleDrive');
 
 const VideoController = {
 
@@ -69,6 +68,9 @@ const VideoController = {
       });
 
       const savedCutVideo = await newVideo.save();
+      // saveCutVideo.data.id
+      // api/video/create => id
+
       res.json(savedCutVideo);
 
     } catch (error) {

@@ -10,7 +10,6 @@ router.get('/protected', authMiddleware, (req, res) => {
 });
 // Cấu hình Multer
 const upload = multer({ dest: 'uploads/' });
-// Route lấy tất cả các ảnh
 router.get('/images', imageController.getAllImages);
 // Route lấy chi tiết một ảnh theo ID
 router.get('/images/:id', imageController.getImageById);
