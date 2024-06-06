@@ -1,0 +1,9 @@
+.main-page {
+  display: flex;
+}
+
+.content {
+  margin-left: 220px; /* Adjust based on TaskBar width */
+  width: calc(100% - 220px);
+  padding-top: 60px; /* Adjust based on SearchBar height */
+}

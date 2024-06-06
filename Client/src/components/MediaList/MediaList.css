@@ -1,0 +1,27 @@
+.media-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  margin-top: 60px; /* Adjust based on SearchBar height */
+  margin-left: 220px; /* Adjust based on TaskBar width */
+}
+
+.media-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.media-item img {
+  width: 100%;
+  height: auto;
+}
+
+.media-item h3 {
+  padding: 10px;
+  font-size: 16px;
+  margin: 0;
+}
