@@ -1,0 +1,18 @@
+.searchbar {
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 220px; /* Adjust based on TaskBar width */
+    right: 0;
+    z-index: 1000;
+  }
+  
+  .searchbar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }

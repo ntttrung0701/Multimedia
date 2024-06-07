@@ -11,7 +11,6 @@ router.get('/protected', authMiddleware, (req, res) => {
 // Cấu hình Multer
 const upload = multer({ dest: 'uploads/' });
 router.get('/images', imageController.getAllImages);
-// Route lấy chi tiết một ảnh theo ID
 router.get('/images/:id', imageController.getImageById);
 // Route tải lên ảnh mới
 // Sử dụng Multer middleware để xử lý file upload trong form-data

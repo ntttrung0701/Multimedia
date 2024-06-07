@@ -3,7 +3,27 @@
 }
 
 .content {
-  margin-left: 220px; /* Adjust based on TaskBar width */
-  width: calc(100% - 220px);
-  padding-top: 60px; /* Adjust based on SearchBar height */
+  margin-left: 240px; /* Adjust based on TaskBar width */
+  width: calc(100% - 240px);
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.header {
+  width: 100%; /* Đảm bảo header chiếm toàn bộ chiều rộng của content */
+  text-align: center;
+  color: #18181a;
+  padding: 20px;
+  border-radius: 0px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+.header p {
+  margin: 10px 0 0;
+  font-size: 18px;
 }

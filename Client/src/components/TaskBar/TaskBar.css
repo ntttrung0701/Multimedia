@@ -1,25 +1,39 @@
 .taskbar {
-  width: 200px;
-  background-color: #f4f4f4;
+  width: 220px;
+  background-color: #18181a;
   padding: 20px;
   position: fixed;
   height: 100%;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
+  color: #ecf0f1; /* Đổi màu chữ */
 }
 
 .taskbar ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .taskbar ul li {
-  margin: 10px 0;
+  margin: 15px 0; /* Tăng khoảng cách giữa các mục */
 }
 
 .taskbar ul li a {
   text-decoration: none;
-  color: #333;
+  color: #ecf0f1; /* Đổi màu chữ */
+  font-size: 16px; /* Tăng kích thước chữ */
+  display: block;
+  padding: 10px 15px;
+  border-radius: 4px; /* Thêm bo tròn góc */
+  transition: background-color 0.3s, color 0.3s; /* Thêm hiệu ứng chuyển màu */
 }
 
 .taskbar ul li a:hover {
-  color: #007bff;
+  background-color: #2c2c2c;
+  color: #1abc9c;
+}
+
+.taskbar ul li a.active {
+  background-color: #1abc9c; /* Màu nền cho mục đang hoạt động */
+  color: #2c3e50; /* Màu chữ cho mục đang hoạt động */
 }

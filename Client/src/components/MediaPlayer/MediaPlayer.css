@@ -1,5 +1,14 @@
 .media-player {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-  }
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #000; /* Thêm màu nền để dễ nhìn */
+  border-radius: 8px; /* Thêm border-radius để làm mềm các góc */
+  overflow: hidden; /* Đảm bảo video không vượt ra ngoài các góc bo tròn */
+}
+
+.media-player video {
+  width: 100%;
+  height: auto;
+  display: block; /* Đảm bảo video chiếm toàn bộ chiều rộng của container */
+}

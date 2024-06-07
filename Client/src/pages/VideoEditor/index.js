@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './VideoEditor.css';
-import TaskBar from '../../components/TaskBar';
-import MediaList from '../../components/MediaList';
+//import TaskBar from '../../components/TaskBar';
 import VideoCutter from '../../components/VideoCutter';
 import VideoUploader from '../../components/VideoUploader';
 import { downloadVideo } from '../../utils/api';
@@ -28,10 +27,8 @@ const VideoEditorPage = () => {
 
   return (
     <div className="video-editor-page">
-      <TaskBar />
       <div className="content">
         <VideoUploader onUpload={handleUpload} />
-        <MediaList onSelect={setSelectedVideo} />
         {selectedVideo && (
           <>
             <VideoCutter video={selectedVideo} />

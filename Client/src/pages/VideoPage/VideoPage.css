@@ -1,0 +1,23 @@
+.video-page {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.video-page h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.video-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-container video {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 8px;
+  background-color: #000;
+}

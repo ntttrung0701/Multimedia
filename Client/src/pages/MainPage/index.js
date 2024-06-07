@@ -8,6 +8,10 @@ const MainPage = () => {
     <div className="main-page">
       <TaskBar />
       <div className="content">
+        <div className="header">
+          <h1>Web súc vật</h1>
+          <p>Explore and enjoy a wide variety of videos and images.</p>
+        </div>
         <MediaList />
       </div>
     </div>

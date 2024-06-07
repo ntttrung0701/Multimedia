@@ -1,27 +1,36 @@
 .media-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* 3 cột cố định */
   gap: 20px;
   padding: 20px;
-  margin-top: 60px; /* Adjust based on SearchBar height */
-  margin-left: 220px; /* Adjust based on TaskBar width */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .media-item {
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
 }
 
+.media-item:hover {
+  transform: translateY(-5px);
+}
+
+.media-item video,
 .media-item img {
   width: 100%;
   height: auto;
+  border-bottom: 1px solid #ddd;
 }
 
 .media-item h3 {
   padding: 10px;
   font-size: 16px;
   margin: 0;
+  text-align: center;
 }

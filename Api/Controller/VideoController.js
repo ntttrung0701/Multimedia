@@ -16,43 +16,28 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Tải lên video
-exports.uploadVideo = [
-  upload.single('video'),
-  async (req, res) => {
-    try {
-      const { title, description } = req.body;
-      const file = req.file;
-
-      if (!file) {
-        return res.status(400).json({ message: 'Please upload a video file' });
-      }
-
-      const newVideo = new Video({
-        path: file.path,
-        size: file.size,
-        title: title,
-        description: description,
-        duration: 0,  // Bạn có thể sử dụng ffmpeg để tính toán thời lượng video nếu cần
-        format: path.extname(file.originalname).slice(1)
-      });
-
-      await newVideo.save();
-      res.status(201).json(newVideo);
-    } catch (error) {
-      res.status(500).json({ message: 'Error uploading video', error });
+exports.getAllVideos = (req, res) => {
+  const videoDir = path.join(__dirname, '../uploads/video');
+  fs.readdir(videoDir, (err, files) => {
+    if (err) {
+      console.error('Unable to scan directory:', err); // Log lỗi
+      return res.status(500).json({ error: 'Unable to scan directory' });
     }
-  }
-];
-// Lấy tất cả video
-exports.getAllVideos = async (req, res) => {
-  try {
-    const videos = await Video.find();
-    res.status(200).json(videos);
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving videos', error });
-  }
+    const videos = files.map(file => ({
+      name: file,
+      url: `/uploads/video/${file}`
+    }));
+    res.json(videos);
+  });
 };
 
+// Phương thức tải lên video
+exports.uploadVideo = (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  res.status(200).json({ message: 'Video uploaded successfully', file: req.file });
+};
 // Lấy từng video
 exports.getVideoById = async (req, res) => {
   try {

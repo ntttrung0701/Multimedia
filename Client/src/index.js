@@ -10,7 +10,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route exact path="/" element={<MainPage />} />
-        <Route path="/video-editor" element={<VideoEditor />} />
+        <Route exact path="/video-editor" element={<VideoEditor />} />
       </Routes>
     </Router>
   );

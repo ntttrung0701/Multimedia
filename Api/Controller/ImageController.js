@@ -7,14 +7,19 @@ const { authenticate } = require("@google-cloud/local-auth");
 const multer = require('multer');
 
 // Lấy tất cả các ảnh từ database
-exports.getAllImages = async (req, res) => {
-    try {
-        const images = await Image.find({});
-        // Trả về danh sách ảnh dưới dạng JSON
-        res.json(images);
-    } catch (error) {
-        res.status(500).send("Error retrieving images from the database");
-    }
+exports.getAllImages = (req, res) => {
+    const directoryPath = path.join(__dirname, '../uploads/image');
+    fs.readdir(directoryPath, (err, files) => {
+        if (err) {
+            console.error('Unable to scan directory:', err); // Log lỗi
+            return res.status(500).json({ error: 'Unable to scan directory' });
+        }
+        const images = files.map(file => ({
+            name: file,
+            url: `/uploads/image/${file}`
+        }));
+        res.send(images);
+    });
 };
 
 async function createDriveClient() {
