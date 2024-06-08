@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './VideoEditor.css';
-//import TaskBar from '../../components/TaskBar';
-import VideoCutter from '../../components/VideoCutter';
-import VideoUploader from '../../components/VideoUploader';
+import VideoCutter from '../../components/VideoCutter/VideoCutter';
+import VideoUploader from '../../components/VideoUploader/VideoUploader';
 import { downloadVideo } from '../../utils/api';
 
 const VideoEditorPage = () => {
@@ -27,12 +26,13 @@ const VideoEditorPage = () => {
 
   return (
     <div className="video-editor-page">
+      <h1>Video Editor</h1>
       <div className="content">
         <VideoUploader onUpload={handleUpload} />
         {selectedVideo && (
           <>
             <VideoCutter video={selectedVideo} />
-            <button onClick={handleDownload}>Download Video</button>
+            <button className="download-button" onClick={handleDownload}>Download Video</button>
           </>
         )}
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import TaskBar from '../../components/TaskBar';
+import TaskBar from '../../components/TaskBar/TaskBar';
 import MediaList from '../../components/MediaList';
 import './MainPage.css';
 
