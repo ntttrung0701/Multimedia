@@ -1,31 +1,40 @@
 import React, { useState } from 'react';
 import './VideoCutter.css';
-import { cutVideo } from '../../utils/api';
+import { extractAudio } from '../../utils/api';
 
 const VideoCutter = ({ video }) => {
   const [startTime, setStartTime] = useState('');
-  const [duration, setDuration] = useState('');
+  const [endTime, setEndTime] = useState('');
 
-  const handleCut = async () => {
-    const data = await cutVideo(video._id, startTime, duration);
-    console.log(data);
+  const handleExtractAudio = async () => {
+    try {
+      await extractAudio(video.filename);
+      alert('Audio extracted successfully!');
+    } catch (err) {
+      console.error('Error extracting audio:', err);
+      alert('Failed to extract audio.');
+    }
+  };
+
+  const handleCutVideo = () => {
+    // Logic cắt video
   };
 
   return (
     <div className="video-cutter">
-      <input
-        type="text"
-        placeholder="Start Time (seconds)"
-        value={startTime}
-        onChange={(e) => setStartTime(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Duration (seconds)"
-        value={duration}
-        onChange={(e) => setDuration(e.target.value)}
-      />
-      <button onClick={handleCut}>Cut Video</button>
+      <h2>Video Cutter</h2>
+      <div className="cutter-controls">
+        <label>
+          Start Time:
+          <input type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+        </label>
+        <label>
+          End Time:
+          <input type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+        </label>
+        <button onClick={handleCutVideo}>Cut Video</button>
+        <button onClick={handleExtractAudio}>Extract Audio</button>
+      </div>
     </div>
   );
 };

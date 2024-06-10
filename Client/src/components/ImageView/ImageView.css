@@ -1,0 +1,52 @@
+.image-view-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.image-view-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* Đảm bảo rằng ảnh không vượt ra ngoài khung */
+}
+
+.image-view-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 10px;
+    transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển đổi mượt mà */
+}
+
+.image-view-content p {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff5a5f;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.close-button:hover {
+    background: #ff1c1f;
+}

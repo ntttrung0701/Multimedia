@@ -16,7 +16,7 @@ exports.getAllImages = (req, res) => {
         }
         const images = files.map(file => ({
             name: file,
-            url: `/uploads/image/${file}`
+            url: `${req.protocol}://${req.get('host')}/uploads/image/${file}`
         }));
         res.send(images);
     });

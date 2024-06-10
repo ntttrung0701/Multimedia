@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
 import ImageEditor from './pages/ImageEditor';
-import VideoEditor from './pages/VideoEditor';
-import VideoPage from './pages/VideoPage';
-import ImagePage from './pages/ImagePage';
+import VideoEditor from './pages/VideoEditor/VideoEditor';
+import VideoPage from './pages/VideoPage/VideoPage';
+import ImagePage from './pages/ImagePage/ImagePage';
 
 const App = () => {
   return (

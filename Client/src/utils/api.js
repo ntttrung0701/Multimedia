@@ -47,7 +47,10 @@ export const downloadVideo = async (id) => {
   });
   return response.data;
 };
-
+export const extractAudio = async (filename) => {
+  const response = await axios.post(`${API_URL}/videos/extract-audio`, { filename });
+  return response.data;
+};
 // Image API
 export const fetchImages = async () => {
   const response = await axios.get(`${API_URL}/images`);

@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskBar from '../../components/TaskBar/TaskBar';
-import MediaList from '../../components/MediaList';
+import MediaList from '../../components/MediaList/MediaList';
 import './MainPage.css';
 
 const MainPage = () => {

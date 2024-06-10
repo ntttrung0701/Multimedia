@@ -24,6 +24,7 @@ router.post('/videos/upload', upload.single('video'), VideoController.uploadVide
 router.get('/videos', VideoController.getAllVideos);
 router.get('/:id', VideoController.getVideoById);
 router.get('/stream/:id', VideoController.streamVideo);
+router.post('extract-audio',VideoController.extractAudio);
 router.post('/cut', VideoController.cutVideo);
 router.get('/download/:id', VideoController.downloadVideo);
 

@@ -156,3 +156,25 @@ exports.downloadVideo = async (req, res) => {
     res.status(500).json({ message: 'Error downloading video', error });
   }
 };
+exports.extractAudio = (req, res) => {
+  const videoPath = path.join(__dirname, '../uploads/video', req.body.filename);
+  const audioPath = path.join(__dirname, '../uploads/audio', `${req.body.filename}.mp3`);
+
+  ffmpeg(videoPath)
+      .output(audioPath)
+      .noVideo()
+      .on('end', () => {
+          res.download(audioPath, `${req.body.filename}.mp3`, (err) => {
+              if (err) {
+                  console.error('Error downloading audio:', err);
+                  res.status(500).send('Error downloading audio');
+              }
+              fs.unlinkSync(audioPath); // Xóa file âm thanh sau khi tải xuống
+          });
+      })
+      .on('error', (err) => {
+          console.error('Error extracting audio:', err);
+          res.status(500).send('Error extracting audio');
+      })
+      .run();
+};
