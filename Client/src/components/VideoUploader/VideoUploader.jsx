@@ -1,49 +1,28 @@
+// src/components/VideoUploader/VideoUploader.jsx
 import React, { useState } from 'react';
 import './VideoUploader.css';
-import { uploadVideo } from '../../utils/api';
 
 const VideoUploader = ({ onUpload }) => {
-  const [file, setFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [message, setMessage] = useState('');
+    const [file, setFile] = useState(null);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setMessage('');
-  };
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+        onUpload(URL.createObjectURL(selectedFile), selectedFile.name);
+    };
 
-  const handleUpload = async () => {
-    if (!file) {
-      setMessage('Please select a file first.');
-      return;
-    }
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const data = await uploadVideo(formData);
-      onUpload(data);
-      setMessage('Upload successful!');
-    } catch (error) {
-      setMessage('Upload failed. Please try again.');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  return (
-    <div className="video-uploader">
-      <h2>Upload Your Video</h2>
-      <input type="file" onChange={handleFileChange} />
-      {file && <p>Selected file: {file.name}</p>}
-      <button onClick={handleUpload} disabled={uploading}>
-        {uploading ? 'Uploading...' : 'Upload Video'}
-      </button>
-      {message && <p className="message">{message}</p>}
-    </div>
-  );
+    return (
+        <div className="video-uploader">
+            <input
+                type="file"
+                accept="video/*"
+                id="video-upload"
+                onChange={handleFileChange}
+            />
+            <label htmlFor="video-upload">Choose Video</label>
+            {file && <div className="file-name">{file.name}</div>}
+        </div>
+    );
 };
 
 export default VideoUploader;

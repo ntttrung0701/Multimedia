@@ -1,28 +1,25 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors'); // Thêm dòng này
-const connectDB = require('./Config/connect');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const imageRoutes = require('./Routes/ImageRoutes');
 const videoRoutes = require('./Routes/VideoRoutes');
-const path = require('path');
 const app = express();
 
+// Middleware để xử lý JSON và URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Định tuyến tĩnh cho thư mục uploads
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// Kết nối MongoDB
-connectDB();
-app.use(express.json());
-app.use(cors()); // Thêm dòng này
-app.use('/api', imageRoutes);
-app.use('/api', videoRoutes);
+// Middleware để cho phép CORS (Cross-Origin Resource Sharing)
+app.use(cors());
+app.use(bodyParser.json());
+app.use('/api/images', imageRoutes);
 
-// Serve static files from the uploads directory
-app.use('/uploads', express.static('uploads'));
+// Route cho video
+app.use('/api/videos', videoRoutes);
 
+// Khởi động server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server đang chạy tại http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

@@ -1,23 +1,41 @@
+/* src/components/VideoUploader/VideoUploader.css */
 .video-uploader {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
-  padding: 20px;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.video-uploader h2 {
-  margin-bottom: 20px;
+.video-uploader input[type="file"] {
+  display: none;
+}
+
+.video-uploader label {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.video-uploader label:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.video-uploader label:active {
+  transform: scale(1);
+}
+
+.video-uploader .file-name {
+  margin-top: 10px;
+  font-size: 16px;
   color: #333;
-}
-
-.video-uploader input {
-  margin: 5px;
-  padding: 10px;
-  width: 200px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
 }

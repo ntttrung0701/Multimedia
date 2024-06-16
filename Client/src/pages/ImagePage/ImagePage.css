@@ -1,10 +1,84 @@
+/* src/pages/ImagePage/ImagePage.css */
 .image-page {
-    padding: 20px;
-    font-family: Arial, sans-serif;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-.image-page h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+.thumbnail-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.thumbnail {
+  width: 100%;
+  height: auto;
+  filter: blur(5px); /* Làm mờ ảnh thumbnail */
+  transition: filter 0.3s ease;
+}
+
+.thumbnail-container:hover .thumbnail {
+  filter: blur(2px); /* Giảm độ mờ khi hover */
+}
+
+.header {
+  position: absolute;
+  top: 50%;
+  left: 20px; /* Đặt chữ bên trái */
+  transform: translateY(-50%);
+  color: white;
+  z-index: 1;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2em;
+  color: white;
+}
+
+.upload-section {
+  margin: 20px 0; /* Điều chỉnh khoảng cách trên và dưới */
+}
+
+/* Styles for ImagePageUploader */
+.image-page-uploader {
+  margin: 20px 0;
+}
+
+.image-page-uploader input[type="file"] {
+  display: none;
+}
+
+.image-page-uploader label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.image-page-uploader label:hover {
+  background-color: #0056b3;
+}
+
+.image-page-uploader .file-name {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.image-preview {
+  margin-top: 20px;
+}
+
+.image-preview img {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px 0;
+  border: 2px solid #ddd;
+  border-radius: 5px;
 }

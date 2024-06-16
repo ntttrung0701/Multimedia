@@ -1,180 +1,91 @@
-const Video = require('../Models/Video');
-const path = require('path');
-const multer = require('multer');
-const fs = require('fs');
+const { storage, db } = require('../Config/firebase');
+const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
+const { collection, addDoc, getDocs, doc, getDoc } = require('firebase/firestore');
+// Api/Controller/VideoController.js
+// Api/Controller/VideoController.js
+const { downloadVideo } = require('../utils/api');
 const ffmpeg = require('fluent-ffmpeg');
+const path = require('path');
+const fs = require('fs');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/videos');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
-
-const upload = multer({ storage: storage });
-
-// Tải lên video
-exports.getAllVideos = (req, res) => {
-  const videoDir = path.join(__dirname, '../uploads/video');
-  fs.readdir(videoDir, (err, files) => {
-    if (err) {
-      console.error('Unable to scan directory:', err); // Log lỗi
-      return res.status(500).json({ error: 'Unable to scan directory' });
-    }
-    const videos = files.map(file => ({
-      name: file,
-      url: `/uploads/video/${file}`
-    }));
-    res.json(videos);
-  });
-};
-
-// Phương thức tải lên video
-exports.uploadVideo = (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No file uploaded' });
-  }
-  res.status(200).json({ message: 'Video uploaded successfully', file: req.file });
-};
-// Lấy từng video
-exports.getVideoById = async (req, res) => {
-  try {
-    const video = await Video.findById(req.params.id);
-    if (!video) {
-      return res.status(404).json({ message: 'Video not found' });
-    }
-    res.status(200).json(video);
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving video', error });
-  }
-};
-// Phát video
-exports.streamVideo = async (req, res) => {
-  try {
-    const video = await Video.findById(req.params.id);
-    if (!video) {
-      return res.status(404).json({ message: 'Video not found' });
-    }
-
-    const videoPath = path.resolve(video.path);
-    const videoStat = fs.statSync(videoPath);
-    const fileSize = videoStat.size;
-    const videoRange = req.headers.range;
-
-    if (videoRange) {
-      const parts = videoRange.replace(/bytes=/, "").split("-");
-      const start = parseInt(parts[0], 10);
-      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-
-      if (start >= fileSize) {
-        res.status(416).send('Requested range not satisfiable\n' + start + ' >= ' + fileSize);
-        return;
-      }
-
-      const chunksize = (end - start) + 1;
-      const file = fs.createReadStream(videoPath, { start, end });
-      const head = {
-        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-        'Accept-Ranges': 'bytes',
-        'Content-Length': chunksize,
-        'Content-Type': 'video/mp4',
-      };
-
-      res.writeHead(206, head);
-      file.pipe(res);
-    } else {
-      const head = {
-        'Content-Length': fileSize,
-        'Content-Type': 'video/mp4',
-      };
-
-      res.writeHead(200, head);
-      fs.createReadStream(videoPath).pipe(res);
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error streaming video', error });
-  }
-};
-
-// Cắt video thành video mới với độ dài tùy chọn
+// Cut Video
 exports.cutVideo = async (req, res) => {
-  const { id, startTime, duration } = req.body;
+  const { videoFileName, startTime, endTime } = req.body;
+  if (!videoFileName) {
+      return res.status(400).json({ error: 'videoFileName is required' });
+  }
 
-  try {
-    const video = await Video.findById(id);
-    if (!video) {
-      return res.status(404).json({ message: 'Video not found' });
-    }
+  const inputPath = path.join(__dirname, '..', 'uploads', videoFileName);
+  const outputPath = path.join(__dirname, '..', 'uploads', `cut-${Date.now()}.mp4`);
 
-    const inputPath = path.resolve(video.path);
-    const outputPath = path.resolve(`uploads/videos/cut-${Date.now()}-${video.filename}`);
-
-    ffmpeg(inputPath)
+  ffmpeg(inputPath)
       .setStartTime(startTime)
-      .setDuration(duration)
+      .setDuration(endTime - startTime)
       .output(outputPath)
       .on('end', async () => {
-        const newVideo = new Video({
-          filename: `cut-${Date.now()}-${video.filename}`,
-          path: outputPath,
-          size: fs.statSync(outputPath).size,
-          mimetype: video.mimetype,
-          title: video.title,
-          duration: duration,
-          format: video.format,
-        });
+          const outputFile = fs.readFileSync(outputPath);
+          const storageRef = ref(storage, `videos/cut-${Date.now()}.mp4`);
+          await uploadBytes(storageRef, outputFile);
+          const url = await getDownloadURL(storageRef);
 
-        await newVideo.save();
-        res.status(201).json(newVideo);
+          fs.unlinkSync(outputPath); // Xóa file tạm thời sau khi upload
+
+          res.status(200).json({ url });
       })
       .on('error', (err) => {
-        res.status(500).json({ message: 'Error cutting video', error: err });
+          console.error('Error cutting video:', err);
+          res.status(500).json({ error: 'Failed to cut video' });
       })
       .run();
-  } catch (error) {
-    res.status(500).json({ message: 'Error cutting video', error });
-  }
 };
 
-// Tải video về từ máy chủ về máy khách
 exports.downloadVideo = async (req, res) => {
+  const { videoPath } = req.params;
   try {
-    const video = await Video.findById(req.params.id);
-    if (!video) {
-      return res.status(404).json({ message: 'Video not found' });
-    }
-
-    const videoPath = path.resolve(video.path);
-    res.download(videoPath, video.filename, (err) => {
-      if (err) {
-        res.status(500).json({ message: 'Error downloading video', error: err });
-      }
-    });
+    const url = await downloadVideo(videoPath);
+    res.status(200).json({ url });
   } catch (error) {
-    res.status(500).json({ message: 'Error downloading video', error });
+    res.status(500).json({ error: 'Failed to download video' });
   }
 };
-exports.extractAudio = (req, res) => {
-  const videoPath = path.join(__dirname, '../uploads/video', req.body.filename);
-  const audioPath = path.join(__dirname, '../uploads/audio', `${req.body.filename}.mp3`);
+// Upload Video
+exports.uploadVideo = async (req, res) => {
+  try {
+      const file = req.file;
+      const storageRef = ref(storage, `videos/${Date.now()}-${file.originalname}`);
+      await uploadBytes(storageRef, file.buffer);
+      const url = await getDownloadURL(storageRef);
 
-  ffmpeg(videoPath)
-      .output(audioPath)
-      .noVideo()
-      .on('end', () => {
-          res.download(audioPath, `${req.body.filename}.mp3`, (err) => {
-              if (err) {
-                  console.error('Error downloading audio:', err);
-                  res.status(500).send('Error downloading audio');
-              }
-              fs.unlinkSync(audioPath); // Xóa file âm thanh sau khi tải xuống
-          });
-      })
-      .on('error', (err) => {
-          console.error('Error extracting audio:', err);
-          res.status(500).send('Error extracting audio');
-      })
-      .run();
+      const docRef = await addDoc(collection(db, 'videos'), {
+          name: file.originalname,
+          url: url,
+          createdAt: new Date(),
+      });
+
+      res.status(200).json({ id: docRef.id, url: url });
+  } catch (error) {
+      console.error('Error uploading video:', error);
+      res.status(500).json({ error: 'Failed to upload video' });
+  }
+};
+// Fetch Videos
+exports.getAllVideos = async (req, res) => {
+  const querySnapshot = await getDocs(collection(db, 'videos'));
+  const videos = [];
+  querySnapshot.forEach((doc) => {
+    videos.push({ id: doc.id, ...doc.data() });
+  });
+  res.status(200).json(videos);
+};
+
+// Get Video by ID
+exports.getVideoById = async (req, res) => {
+  const docRef = doc(db, 'videos', req.params.id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    res.status(200).json(docSnap.data());
+  } else {
+    res.status(404).json({ message: 'Video not found' });
+  }
 };

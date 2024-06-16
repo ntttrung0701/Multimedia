@@ -1,42 +1,84 @@
-import React, { useState } from 'react';
+// src/components/VideoCutter/VideoCutter.jsx
+import React, { useState, useRef, useEffect } from 'react';
 import './VideoCutter.css';
-import { extractAudio } from '../../utils/api';
 
-const VideoCutter = ({ video }) => {
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+const VideoCutter = ({ videoUrl, onCut }) => {
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
+    const [cutVideoUrl, setCutVideoUrl] = useState(null);
+    const videoRef = useRef(null);
 
-  const handleExtractAudio = async () => {
-    try {
-      await extractAudio(video.filename);
-      alert('Audio extracted successfully!');
-    } catch (err) {
-      console.error('Error extracting audio:', err);
-      alert('Failed to extract audio.');
-    }
-  };
+    useEffect(() => {
+        const video = videoRef.current;
+        if (video) {
+            video.addEventListener('loadedmetadata', () => {
+                setEndTime(video.duration);
+            });
+        }
+    }, [videoUrl]);
 
-  const handleCutVideo = () => {
-    // Logic cắt video
-  };
+    const handleReset = () => {
+        setStartTime(0);
+        setEndTime(videoRef.current.duration);
+    };
 
-  return (
-    <div className="video-cutter">
-      <h2>Video Cutter</h2>
-      <div className="cutter-controls">
-        <label>
-          Start Time:
-          <input type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-        </label>
-        <label>
-          End Time:
-          <input type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-        </label>
-        <button onClick={handleCutVideo}>Cut Video</button>
-        <button onClick={handleExtractAudio}>Extract Audio</button>
-      </div>
-    </div>
-  );
+    const handlePreview = async () => {
+        const cutUrl = await onCut(startTime, endTime);
+        setCutVideoUrl(cutUrl);
+    };
+
+    const handleTimeUpdate = (e) => {
+        const video = videoRef.current;
+        if (video) {
+            const currentTime = video.currentTime;
+            if (currentTime < startTime) {
+                video.currentTime = startTime;
+            } else if (currentTime > endTime) {
+                video.currentTime = startTime;
+            }
+        }
+    };
+
+    return (
+        <div className="video-cutter">
+            <video
+                ref={videoRef}
+                controls
+                src={videoUrl}
+                onTimeUpdate={handleTimeUpdate}
+            ></video>
+            <div className="controls">
+                <label>
+                    Start Time:
+                    <input
+                        type="range"
+                        min="0"
+                        max={videoRef.current ? videoRef.current.duration : 0}
+                        value={startTime}
+                        onChange={(e) => setStartTime(Number(e.target.value))}
+                    />
+                </label>
+                <label>
+                    End Time:
+                    <input
+                        type="range"
+                        min="0"
+                        max={videoRef.current ? videoRef.current.duration : 0}
+                        value={endTime}
+                        onChange={(e) => setEndTime(Number(e.target.value))}
+                    />
+                </label>
+                <button onClick={handleReset}>Reset</button>
+                <button onClick={handlePreview}>Preview</button>
+            </div>
+            {cutVideoUrl && (
+                <div className="cut-video-preview">
+                    <h2>Cut Video Preview</h2>
+                    <video controls src={cutVideoUrl}></video>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default VideoCutter;

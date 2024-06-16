@@ -1,29 +1,63 @@
+/* MainPage.css */
 .main-page {
   display: flex;
 }
 
-.content {
-  margin-left: 240px; /* Adjust based on TaskBar width */
-  width: calc(100% - 240px);
+.taskbar {
+  width: 220px;
+  background-color: #18181a;
   padding: 20px;
-  background-color: #f9f9f9;
+  position: fixed;
+  height: 100%;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
+  color: #ecf0f1; /* Đổi màu chữ */
+  z-index: 1000; /* Đảm bảo TaskBar có z-index cao hơn */
+}
+
+.content {
+  margin-left: 220px; /* Để nội dung không bị che bởi TaskBar */
+  padding: 20px; /* Đặt padding để nội dung không sát lề */
+  flex: 1;
+  position: relative; /* Đặt vị trí tương đối để chứa các phần tử con có vị trí tuyệt đối */
+  z-index: 1; /* Đảm bảo nội dung nằm trên TaskBar */
+}
+
+.thumbnail-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  border-radius: 0; /* Loại bỏ bo góc nếu không cần thiết */
+  overflow: hidden;
+}
+
+.thumbnail {
+  width: 100%;
+  height: auto;
+  filter: blur(5px); /* Làm mờ ảnh thumbnail */
+  transition: filter 0.3s ease;
+}
+
+.thumbnail-container:hover .thumbnail {
+  filter: blur(2px); /* Giảm độ mờ khi hover */
 }
 
 .header {
-  width: 100%; /* Đảm bảo header chiếm toàn bộ chiều rộng của content */
-  text-align: center;
-  color: #18181a;
-  padding: 20px;
-  border-radius: 0px;
-  margin-bottom: 20px;
+  position: absolute;
+  top: 10px; /* Đặt chữ sát lề trên */
+  left: 20px; /* Đặt chữ sát lề trái */
+  transform: translateY(0); /* Loại bỏ dịch chuyển theo chiều dọc */
+  color: white;
+  z-index: 2; /* Đảm bảo tiêu đề nằm trên ảnh */
 }
 
 .header h1 {
   margin: 0;
-  font-size: 36px;
+  font-size: 2em;
+  color: white;
 }
 
 .header p {
-  margin: 10px 0 0;
-  font-size: 18px;
+  margin: 0;
+  color: white;
 }

@@ -1,0 +1,30 @@
+/* src/components/ImageTool/ImageTool.css */
+.image-tool {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image-tool button {
+    padding: 10px 20px;
+    margin: 5px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .image-tool button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+  
+  .image-tool button:active {
+    transform: scale(1);
+  }

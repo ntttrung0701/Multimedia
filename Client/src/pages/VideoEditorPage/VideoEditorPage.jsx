@@ -1,43 +1,50 @@
+// src/pages/VideoEditor/VideoEditorPage.jsx
 import React, { useState } from 'react';
-import './VideoEditorPage.css';
-import VideoCutter from '../../components/VideoCutter/VideoCutter';
 import VideoUploader from '../../components/VideoUploader/VideoUploader';
-import { downloadVideo } from '../../utils/api';
+import VideoCutter from '../../components/VideoCutter/VideoCutter';
+import { cutVideo, uploadVideo } from '../../utils/api';
+import './VideoEditorPage.css';
 
 const VideoEditorPage = () => {
-  const [selectedVideo, setSelectedVideo] = useState(null);
+    const [videoUrl, setVideoUrl] = useState(null);
+    const [videoFileName, setVideoFileName] = useState(null);
+    const [cutVideoUrl, setCutVideoUrl] = useState(null);
 
-  const handleUpload = (newVideo) => {
-    setSelectedVideo(newVideo);
-  };
+    const handleUpload = (url, fileName) => {
+        setVideoUrl(url);
+        setVideoFileName(fileName);
+        setCutVideoUrl(null); // Reset cut video URL when a new video is uploaded
+    };
 
-  const handleDownload = async () => {
-    if (selectedVideo) {
-      const blob = await downloadVideo(selectedVideo._id);
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', selectedVideo.filename);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-    }
-  };
+    const handleCut = async (startTime, endTime) => {
+        try {
+            const cutUrl = await cutVideo(videoFileName, startTime, endTime);
 
-  return (
-    <div className="video-editor-page">
-      <h1>Video Editor</h1>
-      <div className="content">
-        <VideoUploader onUpload={handleUpload} />
-        {selectedVideo && (
-          <>
-            <VideoCutter video={selectedVideo} />
-            <button className="download-button" onClick={handleDownload}>Download Video</button>
-          </>
-        )}
-      </div>
-    </div>
-  );
+            // Upload cut video to Firebase
+            const response = await fetch(cutUrl);
+            const blob = await response.blob();
+            const formData = new FormData();
+            formData.append('video', blob, `cut-${videoFileName}`);
+            const uploadResponse = await uploadVideo(formData);
+
+            setCutVideoUrl(uploadResponse.url); // Cập nhật URL của video đã cắt để hiển thị
+            return uploadResponse.url;
+        } catch (error) {
+            console.error('Error cutting video:', error);
+        }
+    };
+
+    return (
+        <div className="video-editor-page">
+            <h1>Video Editor</h1>
+            <VideoUploader onUpload={handleUpload} />
+            {videoUrl && (
+                <div className="video-section">
+                    <VideoCutter videoUrl={videoUrl} onCut={handleCut} />
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default VideoEditorPage;
