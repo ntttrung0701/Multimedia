@@ -15,8 +15,8 @@
 }
 
 .content {
-  margin-left: 220px; /* Để nội dung không bị che bởi TaskBar */
-  padding: 20px; /* Đặt padding để nội dung không sát lề */
+  margin-left: 240px; /* Tăng margin-left để tạo khoảng cách giữa TaskBar và content */
+  padding: 0; /* Loại bỏ padding để nội dung sát lề */
   flex: 1;
   position: relative; /* Đặt vị trí tương đối để chứa các phần tử con có vị trí tuyệt đối */
   z-index: 1; /* Đảm bảo nội dung nằm trên TaskBar */
@@ -44,11 +44,12 @@
 
 .header {
   position: absolute;
-  top: 10px; /* Đặt chữ sát lề trên */
-  left: 20px; /* Đặt chữ sát lề trái */
+  top: 0; /* Đặt chữ sát lề trên */
+  left: 0; /* Đặt chữ sát lề trái */
   transform: translateY(0); /* Loại bỏ dịch chuyển theo chiều dọc */
   color: white;
   z-index: 2; /* Đảm bảo tiêu đề nằm trên ảnh */
+  padding: 10px; /* Thêm padding nếu cần thiết để chữ không sát quá */
 }
 
 .header h1 {

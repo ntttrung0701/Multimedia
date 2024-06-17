@@ -10,5 +10,6 @@ router.post('/upload', upload.single('video'), VideoController.uploadVideo);
 router.get('/', VideoController.getAllVideos);
 router.get('/:id', VideoController.getVideoById);
 router.post('/cut', VideoController.cutVideo);
+router.post('/extract-audio', VideoController.extractAudioFromVideo); // Thêm route cho chức năng xuất âm thanh
 
 module.exports = router;

@@ -7,14 +7,12 @@ import VideoPage from './pages/VideoPage/VideoPage';
 import ImageEditorPage from './pages/ImageEditorPage/ImageEditorPage';
 import VideoEditorPage from './pages/VideoEditorPage/VideoEditorPage';
 import ImageView from './components/ImageView/ImageView';
-import TaskBar from './components/TaskBar/TaskBar';
 import './App.css';
 
 const App = () => {
   return (
     <Router>
       <div className="app">
-        <TaskBar />
         <div className="content">
           <Routes>
             <Route exact path="/" element={<MainPage />} />

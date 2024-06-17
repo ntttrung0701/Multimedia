@@ -6,6 +6,7 @@ import VideoEditorPage from './pages/VideoEditorPage/VideoEditorPage'; // Đảm
 import VideoPage from './pages/VideoPage/VideoPage'; // Đảm bảo đường dẫn đúng
 import ImageEditorPage from './pages/ImageEditorPage/ImageEditorPage';
 import ImagePage from './pages/ImagePage/ImagePage';
+import SoundPage from './pages/SoundPage/SoundPage';
 import './index.css';
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/video-page" element={<VideoPage />} />
         <Route path="/image-page" element={<ImagePage />} />
         <Route path="/image-editor" element={<ImageEditorPage />} />
+        <Route path="/sound-page" element={<SoundPage />} />
       </Routes>
     </Router>
   );

@@ -11,6 +11,7 @@ const TaskBar = () => {
         <li><Link to="/video-editor">Video Editor</Link></li>
         <li><Link to="/video-page">Videos</Link></li>
         <li><Link to="/image-page">Images</Link></li>
+        <li><Link to="/sound-page">Sounds</Link></li> {/* Thêm mục mới */}
       </ul>
     </div>
   );

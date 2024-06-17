@@ -1,7 +1,7 @@
 // api/Controller/ImageController.js
 const { storage, db } = require('../Config/firebase');
-const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
-const { collection, addDoc, getDocs, doc, getDoc } = require('firebase/firestore');
+const { ref, uploadBytes, getDownloadURL, deleteObject } = require('firebase/storage');
+const { collection, addDoc, getDocs, doc, getDoc, deleteDoc } = require('firebase/firestore');
 
 // Upload Image
 exports.uploadImage = async (req, res) => {
@@ -53,5 +53,28 @@ exports.getImageById = async (req, res) => {
   } catch (error) {
     console.error('Error fetching image by ID:', error);
     res.status(500).json({ error: 'Failed to fetch image' });
+  }
+};
+
+// Delete Image
+exports.deleteImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { imageName } = req.body;
+
+    console.log(`Attempting to delete file: images/${imageName}`);
+
+    // Delete from Firebase Storage
+    const storageRef = ref(storage, `images/${imageName}`);
+    await deleteObject(storageRef);
+
+    // Delete from Firestore
+    const docRef = doc(db, 'images', id);
+    await deleteDoc(docRef);
+
+    res.status(200).json({ message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    res.status(500).json({ error: 'Failed to delete image' });
   }
 };

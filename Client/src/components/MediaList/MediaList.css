@@ -1,3 +1,4 @@
+/* src/components/MediaList/MediaList.css */
 .media-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 cột cố định */
@@ -33,4 +34,48 @@
   font-size: 16px;
   margin: 0;
   text-align: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.play-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.play-btn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.play-btn:active {
+  transform: scale(1);
+}
+
+.extract-btn {
+  background-color: #2196F3;
+  color: white;
+}
+
+.extract-btn:hover {
+  background-color: #1e88e5;
+  transform: scale(1.05);
+}
+
+.extract-btn:active {
+  transform: scale(1);
 }

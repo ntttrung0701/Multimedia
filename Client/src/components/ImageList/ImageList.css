@@ -48,3 +48,23 @@
   background-color: #f8f9fa;
   width: 100%; /* Đảm bảo văn bản chiếm toàn bộ chiều rộng của item */
 }
+
+.image-item button {
+  padding: 10px 20px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 10px;
+}
+
+.image-item button:hover {
+  background-color: #e60000;
+  transform: scale(1.05);
+}
+
+.image-item button:active {
+  transform: scale(1);
+}

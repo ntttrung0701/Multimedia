@@ -45,7 +45,7 @@ const VideoPage = () => {
         </>
       ) : (
         <>
-          <h1>Videos</h1>
+          <h1>Kho video về động vật</h1>
           <div className="upload-section">
             <input type="file" accept="video/*" onChange={handleFileChange} />
             <button onClick={handleUpload}>Upload Video</button>

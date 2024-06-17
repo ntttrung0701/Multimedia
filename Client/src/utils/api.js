@@ -1,4 +1,3 @@
-// src/utils/api.js
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -89,6 +88,43 @@ export const cutVideo = async (videoFileName, startTime, endTime) => {
     return response.data.url;
   } catch (error) {
     console.error('Error cutting video:', error);
+    throw error;
+  }
+};
+
+export const deleteImage = async (id, imageName) => {
+  try {
+    const response = await axios.delete(`${API_URL}/images/${id}`, {
+      data: { imageName }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    throw error;
+  }
+};
+
+// Sound API
+
+export const fetchSounds = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/sounds`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching sounds:', error);
+    throw error;
+  }
+};
+
+export const extractAudioFromVideo = async (video) => {
+  try {
+    const response = await axios.post(`${API_URL}/videos/extract-audio`, {
+      videoUrl: video.url,
+      videoName: video.name,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error extracting audio from video:', error);
     throw error;
   }
 };

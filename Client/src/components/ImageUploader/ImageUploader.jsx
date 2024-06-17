@@ -13,8 +13,10 @@ const ImageUploader = ({ onUpload }) => {
 
     return (
         <div className="image-uploader">
-            <input type="file" accept="image/*" onChange={handleFileChange} />
-            {/* Loại bỏ phần hiển thị ảnh đã tải lên nếu không cần thiết */}
+            <label htmlFor="file-upload" className="custom-file-upload">
+                <i className="fa fa-cloud-upload"></i> Choose Image
+            </label>
+            <input id="file-upload" type="file" accept="image/*" onChange={handleFileChange} />
         </div>
     );
 };

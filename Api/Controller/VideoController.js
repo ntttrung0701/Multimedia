@@ -89,3 +89,45 @@ exports.getVideoById = async (req, res) => {
     res.status(404).json({ message: 'Video not found' });
   }
 };
+
+exports.extractAudioFromVideo = async (req, res) => {
+  const { videoUrl, videoName } = req.body;
+  const tempDir = path.join(__dirname, '../temp');
+
+  // Tạo thư mục tạm thời nếu chưa tồn tại
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+  }
+
+  const audioPath = path.join(tempDir, `${videoName}.mp3`);
+
+  ffmpeg(videoUrl)
+    .output(audioPath)
+    .noVideo()
+    .on('end', async () => {
+      try {
+        const audioFile = fs.readFileSync(audioPath);
+        const storageRef = ref(storage, `sounds/${videoName}.mp3`);
+        await uploadBytes(storageRef, audioFile);
+        const audioUrl = await getDownloadURL(storageRef);
+
+        await addDoc(collection(db, 'sounds'), {
+          name: `${videoName}.mp3`,
+          url: audioUrl,
+          createdAt: new Date(),
+        });
+
+        fs.unlinkSync(audioPath); // Xóa file tạm thời sau khi upload
+
+        res.status(200).json({ message: 'Audio extracted and uploaded successfully', url: audioUrl });
+      } catch (error) {
+        console.error('Error uploading audio:', error);
+        res.status(500).json({ error: 'Failed to upload audio' });
+      }
+    })
+    .on('error', (err) => {
+      console.error('Error extracting audio:', err);
+      res.status(500).json({ error: 'Failed to extract audio' });
+    })
+    .run();
+};

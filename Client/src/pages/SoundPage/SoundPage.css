@@ -1,0 +1,12 @@
+/* src/pages/SoundPage/SoundPage.css */
+.sound-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .sound-page h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+  }
