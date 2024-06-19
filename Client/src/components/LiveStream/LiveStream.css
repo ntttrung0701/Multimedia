@@ -1,0 +1,33 @@
+/* src/components/LiveStream/LiveStream.css */
+.live-stream {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .live-stream h1 {
+    margin-bottom: 20px;
+  }
+  
+  .live-stream input {
+    margin-bottom: 10px;
+  }
+  
+  .live-stream button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .live-stream button:hover {
+    background-color: #0056b3;
+  }
+  
+  #live-video {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+  }

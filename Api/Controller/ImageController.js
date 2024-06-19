@@ -78,3 +78,32 @@ exports.deleteImage = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete image' });
   }
 };
+exports.saveEditedImage = async (req, res) => {
+  try {
+    const { imageData, fileName } = req.body;
+
+    // Tạo tên file duy nhất nếu không có
+    const uniqueFileName = fileName || `edited_image_${Date.now()}.png`;
+
+    // Tạo reference tới Firebase Storage
+    const storageRef = storage.ref(`images/${uniqueFileName}`);
+
+    // Lưu ảnh lên Firebase Storage
+    await storageRef.putString(imageData, 'data_url');
+
+    // Lấy URL tải xuống của ảnh
+    const url = await storageRef.getDownloadURL();
+
+    // Lưu URL và thông tin ảnh vào Firestore
+    await firestore.collection('images').add({
+      name: uniqueFileName,
+      url: url,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    res.status(200).json({ message: 'Ảnh đã được lưu thành công!', url });
+  } catch (error) {
+    console.error('Lỗi khi lưu ảnh:', error);
+    res.status(500).json({ error: 'Lỗi khi lưu ảnh. Vui lòng thử lại.' });
+  }
+};

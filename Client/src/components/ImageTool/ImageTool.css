@@ -1,30 +1,104 @@
-/* src/components/ImageTool/ImageTool.css */
 .image-tool {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.image-tool:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .image-tool button {
-  padding: 10px 20px;
-  margin: 5px 0;
-  background-color: #4CAF50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px; /* Đặt chiều rộng cố định */
+  height: 50px; /* Đặt chiều cao cố định */
+  margin: 8px 0;
+  background-color: #f7cc3e;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .image-tool button:hover {
-  background-color: #45a049;
+  background-color: #e2b41d;
   transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .image-tool button:active {
   transform: scale(1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.image-tool button:focus {
+  outline: none;
+}
+
+.image-tool button:focus-visible {
+  outline: 2px solid #f7cc3e;
+}
+
+.crop-inputs {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  margin: 8px 0;
+}
+
+.crop-inputs input {
+  width: 180px; /* Tăng chiều rộng của ô nhập liệu */
+  height: 40px;
+  margin: 0 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+/* CSS cho nút Reset */
+.reset-button {
+  background-color: #D40000 !important; /* Màu đỏ Rosso Corsa */
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 200px; /* Đặt chiều rộng cố định */
+  height: 50px; /* Đặt chiều cao cố định */
+  margin: 8px 0;
+}
+
+.reset-button:hover {
+  background-color: #B30000 !important; /* Màu đỏ đậm hơn khi hover */
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.reset-button:active {
+  transform: scale(1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reset-button:focus {
+  outline: none;
+}
+
+.reset-button:focus-visible {
+  outline: 2px solid #D40000 !important;
 }

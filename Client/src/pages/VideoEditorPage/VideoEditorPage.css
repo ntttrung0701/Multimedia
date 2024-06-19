@@ -1,4 +1,3 @@
-/* src/pages/VideoEditor/VideoEditorPage.css */
 .video-editor-page {
   display: flex;
   flex-direction: column;
@@ -7,7 +6,12 @@
 }
 
 .video-editor-page h1 {
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* Giảm khoảng cách dưới của h1 */
+}
+
+.video-editor-page h3 {
+  margin-top: 0; /* Đảm bảo không có khoảng cách trên của h3 */
+  margin-bottom: 20px; /* Khoảng cách dưới của h3 để tách biệt với phần nội dung tiếp theo */
 }
 
 .video-section {

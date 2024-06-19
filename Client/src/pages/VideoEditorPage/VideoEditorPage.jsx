@@ -36,7 +36,8 @@ const VideoEditorPage = () => {
 
     return (
         <div className="video-editor-page">
-            <h1>Video Editor</h1>
+            <h1>Trang chỉnh sửa video</h1>
+            <h3>Chỉnh sửa video đăng tải lên</h3>
             <VideoUploader onUpload={handleUpload} />
             {videoUrl && (
                 <div className="video-section">

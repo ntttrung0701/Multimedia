@@ -1,0 +1,11 @@
+/* src/pages/LiveStreamPage/LiveStreamPage.css */
+.live-stream-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .live-stream-page h1 {
+    margin-bottom: 20px;
+  }

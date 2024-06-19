@@ -1,7 +1,27 @@
 import axios from 'axios';
+import { storage, firestore } from '../Config/firebase'; // Import Firebase config
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
+// Hàm để lấy URL từ Firestore và hiển thị
+export const fetchAndDisplayFiles = async () => {
+  try {
+    const snapshot = await firestore.collection('files').orderBy('createdAt', 'desc').get();
+    const files = snapshot.docs.map(doc => doc.data());
+    
+    files.forEach(file => {
+      console.log('File URL:', file.url);
+      // Sử dụng URL để hiển thị file (ví dụ: tạo thẻ <img> hoặc <video>)
+    });
+
+    return files;
+  } catch (error) {
+    console.error('Error fetching files from Firestore:', error);
+    return [];
+  }
+};
+
+// Video API
 export const downloadVideo = async (videoPath) => {
   try {
     const response = await axios.get(`${API_URL}/videos/download/${videoPath}`);
@@ -45,8 +65,6 @@ export const getImageById = async (id) => {
     throw error;
   }
 };
-
-// Video API
 
 export const uploadVideo = async (formData) => {
   try {
@@ -105,7 +123,6 @@ export const deleteImage = async (id, imageName) => {
 };
 
 // Sound API
-
 export const fetchSounds = async () => {
   try {
     const response = await axios.get(`${API_URL}/sounds`);
@@ -125,6 +142,33 @@ export const extractAudioFromVideo = async (video) => {
     return response.data;
   } catch (error) {
     console.error('Error extracting audio from video:', error);
+    throw error;
+  }
+};
+
+export const saveEditedImage = async (imageData) => {
+  try {
+    // Tạo tên file duy nhất
+    const fileName = `edited_${Date.now()}.png`;
+
+    // Tạo reference tới Firebase Storage
+    const storageRef = storage.ref(`images/${fileName}`);
+    // Lưu ảnh lên Firebase Storage
+    await storageRef.putString(imageData, 'data_url');
+
+    // Lấy URL tải xuống của ảnh
+    const url = await storageRef.getDownloadURL();
+
+    // Lưu URL và thông tin ảnh vào Firestore
+    await firestore.collection('images').add({
+      name: fileName,
+      url: url,
+      createdAt: new Date(),
+    });
+
+    return url;
+  } catch (error) {
+    console.error('Lỗi khi lưu ảnh:', error);
     throw error;
   }
 };

@@ -53,12 +53,12 @@
 }
 
 .play-btn {
-  background-color: #4CAF50;
+  background-color: #f7cc3e;
   color: white;
 }
 
 .play-btn:hover {
-  background-color: #45a049;
+  background-color: #e4b92c;
   transform: scale(1.05);
 }
 
@@ -67,12 +67,12 @@
 }
 
 .extract-btn {
-  background-color: #2196F3;
+  background-color: #ff3838;
   color: white;
 }
 
 .extract-btn:hover {
-  background-color: #1e88e5;
+  background-color: #dd2c2c;
   transform: scale(1.05);
 }
 
