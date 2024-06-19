@@ -1,4 +1,3 @@
-// src/pages/VideoEditor/VideoEditorPage.jsx
 import React, { useState } from 'react';
 import VideoUploader from '../../components/VideoUploader/VideoUploader';
 import VideoCutter from '../../components/VideoCutter/VideoCutter';
@@ -20,11 +19,15 @@ const VideoEditorPage = () => {
         try {
             const cutUrl = await cutVideo(videoFileName, startTime, endTime);
 
-            // Upload cut video to Firebase
+            // Download the cut video
             const response = await fetch(cutUrl);
             const blob = await response.blob();
+
+            // Create a FormData object to upload the cut video
             const formData = new FormData();
             formData.append('video', blob, `cut-${videoFileName}`);
+
+            // Upload the cut video to Firebase
             const uploadResponse = await uploadVideo(formData);
 
             setCutVideoUrl(uploadResponse.url); // Cập nhật URL của video đã cắt để hiển thị
@@ -42,6 +45,12 @@ const VideoEditorPage = () => {
             {videoUrl && (
                 <div className="video-section">
                     <VideoCutter videoUrl={videoUrl} onCut={handleCut} />
+                </div>
+            )}
+            {cutVideoUrl && (
+                <div className="cut-video-preview">
+                    <h2>Cut Video Preview</h2>
+                    <video controls src={cutVideoUrl}></video>
                 </div>
             )}
         </div>

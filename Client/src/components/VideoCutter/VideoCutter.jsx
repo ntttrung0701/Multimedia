@@ -1,5 +1,5 @@
-// src/components/VideoCutter/VideoCutter.jsx
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import './VideoCutter.css';
 
 const VideoCutter = ({ videoUrl, onCut }) => {
@@ -23,8 +23,12 @@ const VideoCutter = ({ videoUrl, onCut }) => {
     };
 
     const handlePreview = async () => {
-        const cutUrl = await onCut(startTime, endTime);
-        setCutVideoUrl(cutUrl);
+        try {
+            const response = await onCut(videoUrl, startTime, endTime);
+            setCutVideoUrl(response.data.url);
+        } catch (error) {
+            console.error('Error cutting video:', error);
+        }
     };
 
     const handleTimeUpdate = (e) => {
