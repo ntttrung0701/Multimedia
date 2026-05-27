@@ -57,7 +57,21 @@ exports.cutVideo = async (req, res) => {
     res.status(500).json({ error: 'Failed to cut video', details: error.message });
   }
 };
+exports.createShortcutvid = async (req, res) => {
+  const { videoPath } = req.params;
+  try {
+    // Create a simple shortcut object (adjust as needed)
+    const shortcut = {
+      path: videoPath,
+      createdAt: new Date().toISOString(),
+    };
 
+    // Respond with the created shortcut info
+    res.status(200).json({ shortcut });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 // Hàm tải xuống video
 exports.downloadVideo = async (req, res) => {
   const { videoPath } = req.params;

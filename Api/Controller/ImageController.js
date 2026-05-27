@@ -82,19 +82,11 @@ exports.saveEditedImage = async (req, res) => {
   try {
     const { imageData, fileName } = req.body;
 
-    // Tạo tên file duy nhất nếu không có
     const uniqueFileName = fileName || `edited_image_${Date.now()}.png`;
 
-    // Tạo reference tới Firebase Storage
     const storageRef = storage.ref(`images/${uniqueFileName}`);
-
-    // Lưu ảnh lên Firebase Storage
     await storageRef.putString(imageData, 'data_url');
-
-    // Lấy URL tải xuống của ảnh
     const url = await storageRef.getDownloadURL();
-
-    // Lưu URL và thông tin ảnh vào Firestore
     await firestore.collection('images').add({
       name: uniqueFileName,
       url: url,
